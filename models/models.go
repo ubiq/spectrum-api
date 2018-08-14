@@ -53,12 +53,14 @@ type Transaction struct {
 }
 
 type TokenTransfer struct {
+	BlockNumber      uint64  `bson:"blockNumber" json:"blockNumber"`
 	Hash             string  `bson:"hash" json:"hash"`
 	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
 	From             string  `bson:"from" json:"from"`
 	To               string  `bson:"to" json:"to"`
 	Value            string  `bson:"value" json:"value"`
 	Contract         string  `bson:"contract" json:"contract"`
+	Method           string  `bson:"method" json:"method"`
 }
 
 type Uncle struct {
