@@ -19,6 +19,7 @@ const (
   BLOCKS = "blocks"
   TXNS = "transactions"
   UNCLES = "uncles"
+  TRANSFERS = "tokentransfers"
 )
 
 func (e *SpectrumDAO) Connect() {
@@ -75,4 +76,10 @@ func (e *SpectrumDAO) LatestTransactions(limit int) ([]Transaction, error) {
   var txns []Transaction
   err := db.C(TXNS).Find(bson.M{}).Sort("-blockNumber").Limit(limit).All(&txns)
   return txns, err
+}
+
+func (e *SpectrumDAO) LatestTokenTransfers(limit int) ([]TokenTransfer, error) {
+  var transfers []TokenTransfer
+  err := db.C(TRANSFERS).Find(bson.M{}).Sort("-blockNumber").Limit(limit).All(&transfers)
+  return transfers, err
 }
