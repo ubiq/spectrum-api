@@ -20,6 +20,7 @@ const (
   TXNS = "transactions"
   UNCLES = "uncles"
   TRANSFERS = "tokentransfers"
+  REORGS = "forkedblocks"
 )
 
 func (e *SpectrumDAO) Connect() {
@@ -58,6 +59,12 @@ func (e *SpectrumDAO) LatestUncles(limit int) ([]Uncle, error) {
   var uncles []Uncle
   err := db.C(UNCLES).Find(bson.M{}).Sort("-blockNumber").Limit(limit).All(&uncles)
   return uncles, err
+}
+
+func (e *SpectrumDAO) LatestForkedBlocks(limit int) ([]Block, error) {
+  var blocks []Block
+  err := db.C(REORGS).Find(bson.M{}).Sort("-number").Limit(limit).All(&blocks)
+  return blocks, err
 }
 
 func (e *SpectrumDAO) TransactionByHash(hash string) (Transaction, error) {

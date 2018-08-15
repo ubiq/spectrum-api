@@ -68,6 +68,24 @@ func getLatestBlocks(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, blocks)
 }
 
+func getLatestForkedBlocks(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	limit, err := strconv.Atoi(params["limit"])
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	if limit > 1000 {
+		limit = 1000
+	}
+	blocks, err := dao_.LatestForkedBlocks(limit)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusOK, blocks)
+}
+
 func getLatestTransactions(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	limit, err := strconv.Atoi(params["limit"])
@@ -168,6 +186,7 @@ func main() {
 	r.HandleFunc("/blockbyhash/{hash}", getBlockByHash).Methods("GET")
 	r.HandleFunc("/latest", getLatestBlock).Methods("GET")
 	r.HandleFunc("/latestblocks/{limit}", getLatestBlocks).Methods("GET")
+	r.HandleFunc("/latestforkedblocks/{limit}", getLatestForkedBlocks).Methods("GET")
 	r.HandleFunc("/latesttransactions/{limit}", getLatestTransactions).Methods("GET")
 	r.HandleFunc("/latesttokentransfers/{limit}", getLatestTokenTransfers).Methods("GET")
 	r.HandleFunc("/latestuncles/{limit}", getLatestUncles).Methods("GET")
