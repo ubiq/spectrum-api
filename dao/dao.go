@@ -85,6 +85,12 @@ func (e *SpectrumDAO) LatestTransactions(limit int) ([]Transaction, error) {
   return txns, err
 }
 
+func (e *SpectrumDAO) LatestTransactionsByAccount(hash string) ([]Transaction, error) {
+  var txns []Transaction
+  err := db.C(TXNS).Find(bson.M{ "$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Sort("-blockNumber").Limit(25).All(&txns)
+  return txns, err
+}
+
 func (e *SpectrumDAO) LatestTokenTransfers(limit int) ([]TokenTransfer, error) {
   var transfers []TokenTransfer
   err := db.C(TRANSFERS).Find(bson.M{}).Sort("-blockNumber").Limit(limit).All(&transfers)

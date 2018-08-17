@@ -104,6 +104,16 @@ func getLatestTransactions(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, txns)
 }
 
+func getLatestTransactionsByAccount(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	txns, err := dao_.LatestTransactionsByAccount(params["hash"])
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusOK, txns)
+}
+
 func getLatestTokenTransfers(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	limit, err := strconv.Atoi(params["limit"])
@@ -188,6 +198,7 @@ func main() {
 	r.HandleFunc("/latestblocks/{limit}", getLatestBlocks).Methods("GET")
 	r.HandleFunc("/latestforkedblocks/{limit}", getLatestForkedBlocks).Methods("GET")
 	r.HandleFunc("/latesttransactions/{limit}", getLatestTransactions).Methods("GET")
+	r.HandleFunc("/latestaccounttxns/{hash}", getLatestTransactionsByAccount).Methods("GET")
 	r.HandleFunc("/latesttokentransfers/{limit}", getLatestTokenTransfers).Methods("GET")
 	r.HandleFunc("/latestuncles/{limit}", getLatestUncles).Methods("GET")
 	r.HandleFunc("/transaction/{hash}", getTransactionByHash).Methods("GET")
