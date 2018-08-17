@@ -10,11 +10,22 @@ import (
 	"github.com/gorilla/mux"
 	. "github.com/ubiq/spectrum-api/config"
 	. "github.com/ubiq/spectrum-api/dao"
+	. "github.com/ubiq/spectrum-api/models"
 )
 
 var config_ = Config{}
 var dao_ = SpectrumDAO{}
 var port string
+
+type AccountTxn struct {
+	Txns            []Transaction  `bson:"txns" json:"txns"`
+	Total           int             `bson:"total" json:"total"`
+}
+
+type AccountTokenTransfer struct {
+	Txns            []TokenTransfer `bson:"txns" json:"txns"`
+	Total           int             `bson:"total" json:"total"`
+}
 
 func getBlockByHash(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
@@ -111,7 +122,17 @@ func getLatestTransactionsByAccount(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusOK, txns)
+	count, err := dao_.TxnCount(params["hash"])
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res AccountTxn
+	res.Txns = txns
+	res.Total = count
+
+	respondWithJson(w, http.StatusOK, res)
 }
 
 func getLatestTokenTransfersByAccount(w http.ResponseWriter, r *http.Request) {
@@ -121,7 +142,18 @@ func getLatestTokenTransfersByAccount(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusOK, txns)
+
+	count, err := dao_.TokenTransferCount(params["hash"])
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res AccountTokenTransfer
+	res.Txns = txns
+	res.Total = count
+
+	respondWithJson(w, http.StatusOK, res)
 }
 
 func getLatestTokenTransfers(w http.ResponseWriter, r *http.Request) {

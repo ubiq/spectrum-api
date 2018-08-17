@@ -102,3 +102,13 @@ func (e *SpectrumDAO) LatestTokenTransfers(limit int) ([]TokenTransfer, error) {
   err := db.C(TRANSFERS).Find(bson.M{}).Sort("-blockNumber").Limit(limit).All(&transfers)
   return transfers, err
 }
+
+func (e *SpectrumDAO) TxnCount(hash string) (int, error) {
+  count, err := db.C(TXNS).Find(bson.M{ "$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Count()
+  return count, err
+}
+
+func (e *SpectrumDAO) TokenTransferCount(hash string) (int, error) {
+  count, err := db.C(TXNS).Find(bson.M{ "$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Count()
+  return count, err
+}
