@@ -77,3 +77,11 @@ type Uncle struct {
 	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
 	Reward           string  `bson:"reward" json:"reward"`
 }
+
+type Store struct {
+	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
+	Symbol           string  `bson:"symbol" json:"symbol"`
+	Supply           string  `bson:"supply" json:"supply"`
+	LatestBlock      Block   `bson:"latestBlock" json:"latestBlock"`
+	Price            string  `bson:"price" json:"price"`
+}

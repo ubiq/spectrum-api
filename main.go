@@ -212,6 +212,15 @@ func getUncleByHash(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, http.StatusOK, uncle)
 }
 
+func getStore(w http.ResponseWriter, r *http.Request) {
+	store, err := dao_.Store()
+	if err != nil {
+		respondWithError(w, http.StatusOK, err.Error())
+		return
+	}
+	respondWithJson(w, http.StatusOK, store)
+}
+
 func respondWithError(w http.ResponseWriter, code int, msg string) {
 	respondWithJson(w, code, map[string]string{"error": msg})
 }
@@ -234,6 +243,7 @@ func init() {
 
 func main() {
 	r := mux.NewRouter()
+	r.HandleFunc("/status", getStore).Methods("GET")
 	r.HandleFunc("/block/{number}", getBlockByNumber).Methods("GET")
 	r.HandleFunc("/blockbyhash/{hash}", getBlockByHash).Methods("GET")
 	r.HandleFunc("/latest", getLatestBlock).Methods("GET")

@@ -21,6 +21,7 @@ const (
   UNCLES = "uncles"
   TRANSFERS = "tokentransfers"
   REORGS = "forkedblocks"
+  STORE = "sysstores"
 )
 
 func (e *SpectrumDAO) Connect() {
@@ -47,6 +48,12 @@ func (e *SpectrumDAO) LatestBlock() (Block, error) {
   var block Block
   err := db.C(BLOCKS).Find(bson.M{}).Sort("-number").Limit(1).One(&block)
   return block, err
+}
+
+func (e *SpectrumDAO) Store() (Store, error) {
+  var store Store
+  err := db.C(STORE).Find(bson.M{}).Limit(1).One(&store)
+  return store, err
 }
 
 func (e *SpectrumDAO) LatestBlocks(limit int) ([]Block, error) {
