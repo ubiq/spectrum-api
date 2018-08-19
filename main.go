@@ -112,7 +112,17 @@ func getLatestTransactions(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, http.StatusOK, txns)
+	count, err := dao_.TotalTxnCount()
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res AccountTxn
+	res.Txns = txns
+	res.Total = count
+
+	respondWithJson(w, http.StatusOK, res)
 }
 
 func getLatestTransactionsByAccount(w http.ResponseWriter, r *http.Request) {

@@ -115,6 +115,11 @@ func (e *SpectrumDAO) TxnCount(hash string) (int, error) {
   return count, err
 }
 
+func (e *SpectrumDAO) TotalTxnCount() (int, error) {
+  count, err := db.C(TXNS).Find(bson.M{}).Count()
+  return count, err
+}
+
 func (e *SpectrumDAO) TokenTransferCount(hash string) (int, error) {
   count, err := db.C(TRANSFERS).Find(bson.M{ "$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Count()
   return count, err
