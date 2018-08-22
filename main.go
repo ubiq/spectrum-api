@@ -29,6 +29,11 @@ type AccountTokenTransfer struct {
 	Total int             `bson:"total" json:"total"`
 }
 
+type BlockRes struct {
+	Blocks []Block        `bson:"blocks" json:"blocks"`
+	Total  int            `bson:"total" json:"total"`
+}
+
 func getBlockByHash(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	block, err := dao_.BlockByHash(params["hash"])
@@ -79,7 +84,17 @@ func getLatestBlocks(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, r, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, r, http.StatusOK, blocks)
+	count, err := dao_.TotalBlockCount()
+	if err != nil {
+		respondWithError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res BlockRes
+	res.Blocks = blocks
+	res.Total = count
+
+	respondWithJson(w, r, http.StatusOK, res)
 }
 
 func getLatestForkedBlocks(w http.ResponseWriter, r *http.Request) {
