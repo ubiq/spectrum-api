@@ -223,7 +223,7 @@ func getLatestUncles(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, r, http.StatusInternalServerError, err.Error())
 		return
 	}
-	count, err := dao_.TotalBlockCount()
+	count, err := dao_.TotalUncleCount()
 	if err != nil {
 		respondWithError(w, r, http.StatusInternalServerError, err.Error())
 		return
