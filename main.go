@@ -2,11 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
@@ -30,8 +31,13 @@ type AccountTokenTransfer struct {
 }
 
 type BlockRes struct {
-	Blocks []Block        `bson:"blocks" json:"blocks"`
-	Total  int            `bson:"total" json:"total"`
+	Blocks []Block `bson:"blocks" json:"blocks"`
+	Total  int     `bson:"total" json:"total"`
+}
+
+type UncleRes struct {
+	Uncles []Uncle `bson:"uncles" json:"uncles"`
+	Total  int     `bson:"total" json:"total"`
 }
 
 func getBlockByHash(w http.ResponseWriter, r *http.Request) {
@@ -217,7 +223,17 @@ func getLatestUncles(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, r, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, r, http.StatusOK, uncles)
+	count, err := dao_.TotalBlockCount()
+	if err != nil {
+		respondWithError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res UncleRes
+	res.Uncles = uncles
+	res.Total = count
+
+	respondWithJson(w, r, http.StatusOK, res)
 }
 
 func getTransactionByHash(w http.ResponseWriter, r *http.Request) {
