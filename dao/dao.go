@@ -80,6 +80,12 @@ func (e *SpectrumDAO) TransactionByHash(hash string) (Transaction, error) {
 	return txn, err
 }
 
+func (e *SpectrumDAO) TransactionsByBlockNumber(number uint64) ([]Transaction, error) {
+	var txns []Transaction
+	err := db.C(TXNS).Find(bson.M{"blockNumber": number}).All(&txns)
+	return txns, err
+}
+
 func (e *SpectrumDAO) UncleByHash(hash string) (Uncle, error) {
 	var uncle Uncle
 	err := db.C(UNCLES).Find(bson.M{"hash": hash}).One(&uncle)
@@ -94,13 +100,13 @@ func (e *SpectrumDAO) LatestTransactions(limit int) ([]Transaction, error) {
 
 func (e *SpectrumDAO) LatestTransactionsByAccount(hash string) ([]Transaction, error) {
 	var txns []Transaction
-	err := db.C(TXNS).Find(bson.M{"$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Sort("-blockNumber").Limit(25).All(&txns)
+	err := db.C(TXNS).Find(bson.M{"$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Sort("-blockNumber").Limit(100).All(&txns)
 	return txns, err
 }
 
 func (e *SpectrumDAO) LatestTokenTransfersByAccount(hash string) ([]TokenTransfer, error) {
 	var transfers []TokenTransfer
-	err := db.C(TRANSFERS).Find(bson.M{"$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Sort("-blockNumber").Limit(25).All(&transfers)
+	err := db.C(TRANSFERS).Find(bson.M{"$or": []bson.M{bson.M{"from": hash}, bson.M{"to": hash}}}).Sort("-blockNumber").Limit(100).All(&transfers)
 	return transfers, err
 }
 

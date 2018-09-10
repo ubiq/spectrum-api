@@ -169,6 +169,22 @@ func getLatestTransactionsByAccount(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, r, http.StatusOK, res)
 }
 
+func getTransactionsByBlockNumber(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	number, uerr := strconv.ParseUint(params["number"], 10, 64)
+	if uerr != nil {
+		respondWithError(w, r, http.StatusBadRequest, uerr.Error())
+		return
+	}
+	txns, err := dao_.TransactionsByBlockNumber(number)
+	if err != nil {
+		respondWithError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	respondWithJson(w, r, http.StatusOK, txns)
+}
+
 func getLatestTokenTransfersByAccount(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	txns, err := dao_.LatestTokenTransfersByAccount(params["hash"])
@@ -316,6 +332,7 @@ func main() {
 	r.HandleFunc("/status", getStore).Methods("GET")
 	r.HandleFunc("/block/{number}", getBlockByNumber).Methods("GET")
 	r.HandleFunc("/blockbyhash/{hash}", getBlockByHash).Methods("GET")
+	r.HandleFunc("/blocktransactions/{number}", getTransactionsByBlockNumber).Methods("GET")
 	r.HandleFunc("/latest", getLatestBlock).Methods("GET")
 	r.HandleFunc("/latestblocks/{limit}", getLatestBlocks).Methods("GET")
 	r.HandleFunc("/latestforkedblocks/{limit}", getLatestForkedBlocks).Methods("GET")
