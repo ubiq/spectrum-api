@@ -1,37 +1,37 @@
 package models
 
 type Block struct {
-	Number           uint64  `bson:"number" json:"number"`
-	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
-	Transactions     uint64  `bson:"transactions" json:"transactions"`
-	Hash             string  `bson:"hash" json:"hash"`
-	ParentHash       string  `bson:"parentHash" json:"parentHash"`
-	Sha3Uncles       string  `bson:"sha3Uncles" json:"sha3Uncles"`
-	Miner            string  `bson:"miner" json:"miner"`
-	Difficulty       string  `bson:"difficulty" json:"difficulty"`
-	TotalDifficulty  string  `bson:"totalDifficulty" json:"totalDifficulty"`
-	Size             uint64  `bson:"size" json:"size"`
-	GasUsed          uint64  `bson:"gasUsed" json:"gasUsed"`
-	GasLimit         uint64  `bson:"gasLimit" json:"gasLimit"`
-	Nonce            string  `bson:"nonce" json:"nonce"`
-	Uncles           uint64  `bson:"uncles" json:"uncles"`
-	BlockReward      string  `bson:"blockReward" json:"blockReward"`
-	UnclesReward     string  `bson:"unclesReward" json:"unclesReward"`
-	AvgGasPrice      string  `bson:"avgGasPrice" json:"avgGasPrice"`
-	TxFees           string  `bson:"txFees" json:"txFees"`
-	ExtraData        string  `bson:"extraData" json:"extraData"`
+	Number          uint64 `bson:"number" json:"number"`
+	Timestamp       uint64 `bson:"timestamp" json:"timestamp"`
+	Transactions    uint64 `bson:"transactions" json:"transactions"`
+	Hash            string `bson:"hash" json:"hash"`
+	ParentHash      string `bson:"parentHash" json:"parentHash"`
+	Sha3Uncles      string `bson:"sha3Uncles" json:"sha3Uncles"`
+	Miner           string `bson:"miner" json:"miner"`
+	Difficulty      string `bson:"difficulty" json:"difficulty"`
+	TotalDifficulty string `bson:"totalDifficulty" json:"totalDifficulty"`
+	Size            uint64 `bson:"size" json:"size"`
+	GasUsed         uint64 `bson:"gasUsed" json:"gasUsed"`
+	GasLimit        uint64 `bson:"gasLimit" json:"gasLimit"`
+	Nonce           string `bson:"nonce" json:"nonce"`
+	Uncles          uint64 `bson:"uncles" json:"uncles"`
+	BlockReward     string `bson:"blockReward" json:"blockReward"`
+	UnclesReward    string `bson:"unclesReward" json:"unclesReward"`
+	AvgGasPrice     string `bson:"avgGasPrice" json:"avgGasPrice"`
+	TxFees          string `bson:"txFees" json:"txFees"`
+	ExtraData       string `bson:"extraData" json:"extraData"`
 }
 
 type TxLog struct {
-	Address          string    `bson:"address" json:"address"`
-	Topics           []string  `bson:"topics" json:"topics"`
-	Data             string    `bson:"data" json:"data"`
-	BlockNumber      uint64    `bson:"blockNumber" json:"blockNumber"`
-	TransactionIndex uint64    `bson:"transactionIndex" json:"transactionIndex"`
-	TransactionHash  string    `bson:"transactionHash" json:"transactionHash"`
-	BlockHash        string    `bson:"blockHash" json:"blockHash"`
-	LogIndex         uint64    `bson:"logIndex" json:"logIndex"`
-	Removed          bool      `bson:"removed" json:"removed"`
+	Address          string   `bson:"address" json:"address"`
+	Topics           []string `bson:"topics" json:"topics"`
+	Data             string   `bson:"data" json:"data"`
+	BlockNumber      uint64   `bson:"blockNumber" json:"blockNumber"`
+	TransactionIndex uint64   `bson:"transactionIndex" json:"transactionIndex"`
+	TransactionHash  string   `bson:"transactionHash" json:"transactionHash"`
+	BlockHash        string   `bson:"blockHash" json:"blockHash"`
+	LogIndex         uint64   `bson:"logIndex" json:"logIndex"`
+	Removed          bool     `bson:"removed" json:"removed"`
 }
 
 type Transaction struct {
@@ -53,36 +53,41 @@ type Transaction struct {
 }
 
 type TokenTransfer struct {
-	BlockNumber      uint64  `bson:"blockNumber" json:"blockNumber"`
-	Hash             string  `bson:"hash" json:"hash"`
-	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
-	From             string  `bson:"from" json:"from"`
-	To               string  `bson:"to" json:"to"`
-	Value            string  `bson:"value" json:"value"`
-	Contract         string  `bson:"contract" json:"contract"`
-	Method           string  `bson:"method" json:"method"`
+	BlockNumber uint64 `bson:"blockNumber" json:"blockNumber"`
+	Hash        string `bson:"hash" json:"hash"`
+	Timestamp   uint64 `bson:"timestamp" json:"timestamp"`
+	From        string `bson:"from" json:"from"`
+	To          string `bson:"to" json:"to"`
+	Value       string `bson:"value" json:"value"`
+	Contract    string `bson:"contract" json:"contract"`
+	Method      string `bson:"method" json:"method"`
 }
 
 type Uncle struct {
-	Number           uint64  `bson:"number" json:"number"`
-	Position         uint64  `bson:"position" json:"position"`
-	BlockNumber      uint64  `bson:"blockNumber" json:"blockNumber"`
-	Hash             string  `bson:"hash" json:"hash"`
-	ParentHash       string  `bson:"parentHash" json:"parentHash"`
-	Sha3Uncles       string  `bson:"sha3Uncles" json:"sha3Uncles"`
-	Miner            string  `bson:"miner" json:"miner"`
-	Difficulty       string  `bson:"difficulty" json:"difficulty"`
-	GasUsed          uint64  `bson:"gasUsed" json:"gasUsed"`
-	GasLimit         uint64  `bson:"gasLimit" json:"gasLimit"`
-	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
-	Reward           string  `bson:"reward" json:"reward"`
+	Number      uint64 `bson:"number" json:"number"`
+	Position    uint64 `bson:"position" json:"position"`
+	BlockNumber uint64 `bson:"blockNumber" json:"blockNumber"`
+	Hash        string `bson:"hash" json:"hash"`
+	ParentHash  string `bson:"parentHash" json:"parentHash"`
+	Sha3Uncles  string `bson:"sha3Uncles" json:"sha3Uncles"`
+	Miner       string `bson:"miner" json:"miner"`
+	Difficulty  string `bson:"difficulty" json:"difficulty"`
+	GasUsed     uint64 `bson:"gasUsed" json:"gasUsed"`
+	GasLimit    uint64 `bson:"gasLimit" json:"gasLimit"`
+	Timestamp   uint64 `bson:"timestamp" json:"timestamp"`
+	Reward      string `bson:"reward" json:"reward"`
+}
+
+type TxnCounts struct {
+	Data   []int    `bson:"data" json:"data"`
+	Labels []string `bson:"labels" json:"labels"`
 }
 
 type Store struct {
-	Timestamp        uint64  `bson:"timestamp" json:"timestamp"`
-	Symbol           string  `bson:"symbol" json:"symbol"`
-	Supply           string  `bson:"supply" json:"supply"`
-	LatestBlock      Block   `bson:"latestBlock" json:"latestBlock"`
-	Price            string  `bson:"price" json:"price"`
-	TxnCounts        []int   `bson:"txnCounts" json:"txnCounts"`
+	Timestamp   uint64    `bson:"timestamp" json:"timestamp"`
+	Symbol      string    `bson:"symbol" json:"symbol"`
+	Supply      string    `bson:"supply" json:"supply"`
+	LatestBlock Block     `bson:"latestBlock" json:"latestBlock"`
+	Price       string    `bson:"price" json:"price"`
+	TxnCounts   TxnCounts `bson:"txnCounts" json:"txnCounts"`
 }
