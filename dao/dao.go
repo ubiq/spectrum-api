@@ -131,6 +131,11 @@ func (e *SpectrumDAO) TokenTransferCount(hash string) (int, error) {
 	return count, err
 }
 
+func (e *SpectrumDAO) TotalTokenTransferCount() (int, error) {
+	count, err := db.C(TRANSFERS).Find(bson.M{}).Count()
+	return count, err
+}
+
 func (e *SpectrumDAO) TotalBlockCount() (int, error) {
 	count, err := db.C(BLOCKS).Find(bson.M{}).Count()
 	return count, err

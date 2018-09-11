@@ -216,12 +216,24 @@ func getLatestTokenTransfers(w http.ResponseWriter, r *http.Request) {
 	if limit > 1000 {
 		limit = 1000
 	}
+
 	transfers, err := dao_.LatestTokenTransfers(limit)
 	if err != nil {
 		respondWithError(w, r, http.StatusInternalServerError, err.Error())
 		return
 	}
-	respondWithJson(w, r, http.StatusOK, transfers)
+
+	count, err := dao_.TotalTokenTransferCount()
+	if err != nil {
+		respondWithError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res AccountTokenTransfer
+	res.Txns = transfers
+	res.Total = count
+
+	respondWithJson(w, r, http.StatusOK, res)
 }
 
 func getLatestUncles(w http.ResponseWriter, r *http.Request) {
