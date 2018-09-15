@@ -80,6 +80,12 @@ func (e *SpectrumDAO) TransactionByHash(hash string) (Transaction, error) {
 	return txn, err
 }
 
+func (e *SpectrumDAO) TransactionByContractAddress(hash string) (Transaction, error) {
+	var txn Transaction
+	err := db.C(TXNS).Find(bson.M{"contractAddress": hash}).One(&txn)
+	return txn, err
+}
+
 func (e *SpectrumDAO) TransactionsByBlockNumber(number uint64) ([]Transaction, error) {
 	var txns []Transaction
 	err := db.C(TXNS).Find(bson.M{"blockNumber": number}).All(&txns)

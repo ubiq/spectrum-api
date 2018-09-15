@@ -274,6 +274,16 @@ func getTransactionByHash(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, r, http.StatusOK, txn)
 }
 
+func getTransactionByContractAddress(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	txn, err := dao_.TransactionByContractAddress(params["hash"])
+	if err != nil {
+		respondWithError(w, r, http.StatusOK, err.Error())
+		return
+	}
+	respondWithJson(w, r, http.StatusOK, txn)
+}
+
 func getUncleByHash(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	uncle, err := dao_.UncleByHash(params["hash"])
@@ -354,6 +364,7 @@ func main() {
 	r.HandleFunc("/latesttokentransfers/{limit}", getLatestTokenTransfers).Methods("GET")
 	r.HandleFunc("/latestuncles/{limit}", getLatestUncles).Methods("GET")
 	r.HandleFunc("/transaction/{hash}", getTransactionByHash).Methods("GET")
+	r.HandleFunc("/transactionbycontract/{hash}", getTransactionByContractAddress).Methods("GET")
 	r.HandleFunc("/uncle/{hash}", getUncleByHash).Methods("GET")
 
 	handler := cors.Default().Handler(r)
