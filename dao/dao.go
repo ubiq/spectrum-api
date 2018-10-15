@@ -116,6 +116,12 @@ func (e *SpectrumDAO) LatestTokenTransfersByAccount(hash string) ([]TokenTransfe
 	return transfers, err
 }
 
+func (e *SpectrumDAO) TokenTransfersByAccount(token string, account string) ([]TokenTransfer, error) {
+	var transfers []TokenTransfer
+	err := db.C(TRANSFERS).Find(bson.M{"$or": []bson.M{bson.M{"$and": []bson.M{bson.M{"from": account}, bson.M{"contract": token}}}, bson.M{"$and": []bson.M{bson.M{"to": account}, bson.M{"contract": token}}}}}).Sort("-blockNumber").All(&transfers)
+	return transfers, err
+}
+
 func (e *SpectrumDAO) LatestTransfersByToken(hash string) ([]TokenTransfer, error) {
 	var transfers []TokenTransfer
 	err := db.C(TRANSFERS).Find(bson.M{"contract": hash}).Sort("-blockNumber").Limit(1000).All(&transfers)
@@ -150,6 +156,12 @@ func (e *SpectrumDAO) TokenTransferCountByContract(hash string) (int, error) {
 
 func (e *SpectrumDAO) TotalTokenTransferCount() (int, error) {
 	count, err := db.C(TRANSFERS).Find(bson.M{}).Count()
+	return count, err
+}
+
+func (e *SpectrumDAO) TokenTransferByAccountCount(token string, account string) (int, error) {
+	count, err := db.C(TRANSFERS).Find(
+		bson.M{"$or": []bson.M{bson.M{"$and": []bson.M{bson.M{"from": account}, bson.M{"contract": token}}}, bson.M{"$and": []bson.M{bson.M{"to": account}, bson.M{"contract": token}}}}}).Count()
 	return count, err
 }
 

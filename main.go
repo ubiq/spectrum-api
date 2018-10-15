@@ -206,6 +206,27 @@ func getLatestTokenTransfersByAccount(w http.ResponseWriter, r *http.Request) {
 	respondWithJson(w, r, http.StatusOK, res)
 }
 
+func getTokenTransfersByAccount(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	txns, err := dao_.TokenTransfersByAccount(params["token"], params["account"])
+	if err != nil {
+		respondWithError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	count, err := dao_.TokenTransferByAccountCount(params["token"], params["account"])
+	if err != nil {
+		respondWithError(w, r, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	var res AccountTokenTransfer
+	res.Txns = txns
+	res.Total = count
+
+	respondWithJson(w, r, http.StatusOK, res)
+}
+
 func getLatestTokenTransfers(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	limit, err := strconv.Atoi(params["limit"])
@@ -383,6 +404,7 @@ func main() {
 	r.HandleFunc("/latestaccounttxns/{hash}", getLatestTransactionsByAccount).Methods("GET")
 	r.HandleFunc("/latestaccounttokentxns/{hash}", getLatestTokenTransfersByAccount).Methods("GET")
 	r.HandleFunc("/latesttransfersbytoken/{hash}", getLatestTransfersByToken).Methods("GET")
+	r.HandleFunc("/tokentransfersbyaccount/{token}/{account}", getTokenTransfersByAccount).Methods("GET")
 	r.HandleFunc("/latesttokentransfers/{limit}", getLatestTokenTransfers).Methods("GET")
 	r.HandleFunc("/latestuncles/{limit}", getLatestUncles).Methods("GET")
 	r.HandleFunc("/transaction/{hash}", getTransactionByHash).Methods("GET")
